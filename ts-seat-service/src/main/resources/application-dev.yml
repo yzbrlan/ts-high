@@ -1,0 +1,15 @@
+server:
+  port: 18898
+
+spring:
+  application:
+    name: ts-seat-service
+
+swagger:
+  controllerPackage: seat.controller
+
+opentracing:
+  jaeger:
+    udp-sender:
+      host: 101.132.193.242
+      port: 6831

@@ -1,0 +1,238 @@
+version: '3'
+services:
+
+#  rabbitmq:
+#    image: rabbitmq:management
+#    ports:
+#      - 5672:5672
+#      - 15672:15672
+#    networks:
+#      - my-network
+
+#  redis:
+#    image: redis
+#    ports:
+#      - 6379:6379
+#    networks:
+#      - my-network
+
+  ts-user-service:
+    build: ts-user-service
+    image: ts/ts-user-service
+    restart: always
+    ports:
+      - 12342:12342
+    network_mode: "host"
+
+  #    networks:
+#      - my-network
+
+#  ts-user-mongo:
+#    image: mongo
+#    networks:
+#      - my-network
+#
+#  ts-account-mongo:
+#    image: mongo
+#    networks:
+#      - my-network
+
+  ts-route-service:
+    build: ts-route-service
+    image: ts/ts-route-service
+    restart: always
+    ports:
+      - 11178:11178
+    network_mode: "host"
+
+  #    networks:
+#      - my-network
+
+#  ts-route-mongo:
+#    image: mongo
+#    networks:
+#        - my-network
+
+  ts-contacts-service:
+    build: ts-contacts-service
+    image: ts/ts-contacts-service
+    restart: always
+    ports:
+      - 12347:12347
+    network_mode: "host"
+
+  #    networks:
+#      - my-network
+
+#  ts-contacts-mongo:
+#      image: mongo
+#      networks:
+#        - my-network
+
+  ts-order-service:
+    build: ts-order-service
+    image: ts/ts-order-service
+    restart: always
+    ports:
+      - 12031:12031
+    network_mode: "host"
+
+  #    networks:
+#      - my-network
+
+#  ts-order-mongo:
+#    image: mongo
+#    networks:
+#      - my-network
+
+  ts-station-service:
+    build: ts-station-service
+    image: ts/ts-station-service
+    restart: always
+    ports:
+      - 12345:12345
+    network_mode: "host"
+
+  #    networks:
+#      - my-network
+
+#  ts-station-mongo:
+#    image: mongo
+#    networks:
+#      - my-network
+
+  ts-train-service:
+    build: ts-train-service
+    image: ts/ts-train-service
+    restart: always
+    ports:
+      - 14567:14567
+    network_mode: "host"
+
+  #    networks:
+#      - my-network
+
+#  ts-train-mongo:
+#    image: mongo
+#    networks:
+#      - my-network
+
+  ts-travel-service:
+    build: ts-travel-service
+    image: ts/ts-travel-service
+    restart: always
+    ports:
+      - 12346:12346
+    network_mode: "host"
+
+  #    networks:
+#      - my-network
+
+#  ts-travel-mongo:
+#    image: mongo
+#    networks:
+#      - my-network
+
+#  ts-preserve-service:
+#    build: ts-preserve-service
+#    image: ts/ts-preserve-service
+#    restart: always
+#    ports:
+#      - 14568:14568
+#    networks:
+#      - my-network
+
+  ts-basic-service:
+      build: ts-basic-service
+      image: ts/ts-basic-service
+      restart: always
+      ports:
+        - 15680:15680
+      network_mode: "host"
+
+  #      networks:
+#          - my-network
+
+  ts-ticketinfo-service:
+        build: ts-ticketinfo-service
+        image: ts/ts-ticketinfo-service
+        restart: always
+        ports:
+          - 15681:15681
+        network_mode: "host"
+
+  #        networks:
+#          - my-network
+
+  ts-price-service:
+        build: ts-price-service
+        image: ts/ts-price-service
+        restart: always
+        ports:
+          - 16579:16579
+        network_mode: "host"
+
+  #        networks:
+#          - my-network
+
+#  ts-price-mongo:
+#        image: mongo
+#        networks:
+#          - my-network
+
+  ts-notification-service:
+        build: ts-notification-service
+        image: ts/ts-notification-service
+        restart: always
+        ports:
+          - 17853:17853
+        network_mode: "host"
+  #        networks:
+#          - my-network
+
+  ts-seat-service:
+        build: ts-seat-service
+        image: ts/ts-seat-service
+        restart: always
+        ports:
+          - 18898:18898
+        network_mode: "host"
+  #        networks:
+#          - my-network
+
+  ts-config-service:
+    build: ts-config-service
+    image: ts/ts-config-service
+    restart: always
+    ports:
+      - 15679:15679
+    network_mode: "host"
+#    networks:
+#      - my-network
+
+#  ts-config-mongo:
+#    image: mongo
+#    networks:
+#      - my-network
+
+#  jaeger:
+#    image: jaegertracing/all-in-one:1.15
+#    ports:
+#      - 16686:16686
+#    deploy:
+#      replicas: 1
+#      restart_policy:
+#        condition: on-failure
+#    networks:
+#      - my-network
+
+
+#networks:
+#    my-network:
+#      # driver: overlay
+#      driver: host
+
+
+
+
+

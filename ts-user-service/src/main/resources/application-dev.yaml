@@ -1,0 +1,20 @@
+server:
+  port: 12342
+
+spring:
+  application:
+    name: ts-user-service
+  data:
+    mongodb:
+      host: 101.132.193.242
+      database: ts-user-mongo
+      port: 27017
+
+swagger:
+  controllerPackage: user.controller
+
+opentracing:
+  jaeger:
+    udp-sender:
+      host: 101.132.193.242
+      port: 6831

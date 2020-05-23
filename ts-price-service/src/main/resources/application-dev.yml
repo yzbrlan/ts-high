@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: ts-price-service
+  data:
+    mongodb:
+      host: 101.132.193.242
+#      username: user
+#      password: ${MONGODB_PASSWORD}
+      database: ts
+      port: 27017
+
+
+# HTTP Server
+server:
+  port: 16579  # HTTP (Tomcat) port
+
+swagger:
+  controllerPackage: price.controller
+
+opentracing:
+  jaeger:
+    udp-sender:
+      host: 101.132.193.242
+      port: 6831
