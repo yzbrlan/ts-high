@@ -20,3 +20,7 @@ opentracing:
     udp-sender:
       host: 101.132.193.242
       port: 6831
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/

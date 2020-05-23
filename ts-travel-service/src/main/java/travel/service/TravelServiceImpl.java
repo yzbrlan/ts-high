@@ -216,7 +216,8 @@ public class TravelServiceImpl implements TravelService {
         HttpEntity requestEntity = new HttpEntity(query, headers);
         ResponseEntity<Response> re = restTemplate.exchange(
 //                "http://ts-ticketinfo-service:15681/api/v1/ticketinfoservice/ticketinfo",
-                "http://localhost:15681/api/v1/ticketinfoservice/ticketinfo",
+                "http://ts-ticketinfo-service/api/v1/ticketinfoservice/ticketinfo",
+//                "http://localhost:15681/api/v1/ticketinfoservice/ticketinfo",
                 HttpMethod.POST,
                 requestEntity,
                 Response.class);
@@ -227,7 +228,8 @@ public class TravelServiceImpl implements TravelService {
         requestEntity = new HttpEntity(headers);
         ResponseEntity<Response<SoldTicket>> re2 = restTemplate.exchange(
 //                "http://ts-order-service:12031/api/v1/orderservice/order/" + departureTime + "/" + trip.getTripId().toString(),
-                "http://localhost:12031/api/v1/orderservice/order/" + departureTime + "/" + trip.getTripId().toString(),
+                "http://ts-order-service/api/v1/orderservice/order/" + departureTime + "/" + trip.getTripId().toString(),
+//                "http://localhost:12031/api/v1/orderservice/order/" + departureTime + "/" + trip.getTripId().toString(),
                 HttpMethod.GET,
                 requestEntity,
                 new ParameterizedTypeReference<Response<SoldTicket>>() {
@@ -318,8 +320,9 @@ public class TravelServiceImpl implements TravelService {
     private TrainType getTrainType(String trainTypeId, HttpHeaders headers) {
         HttpEntity requestEntity = new HttpEntity(headers);
         ResponseEntity<Response<TrainType>> re = restTemplate.exchange(
-                "http://localhost:14567/api/v1/trainservice/trains/" + trainTypeId,
+//                "http://localhost:14567/api/v1/trainservice/trains/" + trainTypeId,
 //                "http://ts-train-service:14567/api/v1/trainservice/trains/" + trainTypeId,
+                "http://ts-train-service/api/v1/trainservice/trains/" + trainTypeId,
                 HttpMethod.GET,
                 requestEntity,
                 new ParameterizedTypeReference<Response<TrainType>>() {
@@ -331,8 +334,9 @@ public class TravelServiceImpl implements TravelService {
     private String queryForStationId(String stationName, HttpHeaders headers) {
         HttpEntity requestEntity = new HttpEntity(headers);
         ResponseEntity<Response<String>> re = restTemplate.exchange(
-                "http://localhost:15681/api/v1/ticketinfoservice/ticketinfo/" + stationName,
+//                "http://localhost:15681/api/v1/ticketinfoservice/ticketinfo/" + stationName,
 //                "http://ts-ticketinfo-service:15681/api/v1/ticketinfoservice/ticketinfo/" + stationName,
+                "http://ts-ticketinfo-service/api/v1/ticketinfoservice/ticketinfo/" + stationName,
                 HttpMethod.GET,
                 requestEntity,
                 new ParameterizedTypeReference<Response<String>>() {
@@ -346,8 +350,9 @@ public class TravelServiceImpl implements TravelService {
         TravelServiceImpl.LOGGER.info("[Travel Service][Get Route By Id] Route ID：{}", routeId);
         HttpEntity requestEntity = new HttpEntity(headers);
         ResponseEntity<Response> re = restTemplate.exchange(
-                "http://localhost:11178/api/v1/routeservice/routes/" + routeId,
+//                "http://localhost:11178/api/v1/routeservice/routes/" + routeId,
 //                "http://ts-route-service:11178/api/v1/routeservice/routes/" + routeId,
+                "http://ts-route-service/api/v1/routeservice/routes/" + routeId,
                 HttpMethod.GET,
                 requestEntity,
                 Response.class);
@@ -378,8 +383,9 @@ public class TravelServiceImpl implements TravelService {
 
         HttpEntity requestEntity = new HttpEntity(seatRequest, headers);
         ResponseEntity<Response<Integer>> re = restTemplate.exchange(
-                "http://localhost:18898/api/v1/seatservice/seats/left_tickets",
+//                "http://localhost:18898/api/v1/seatservice/seats/left_tickets",
 //                "http://ts-seat-service:18898/api/v1/seatservice/seats/left_tickets",
+                "http://ts-seat-service/api/v1/seatservice/seats/left_tickets",
                 HttpMethod.POST,
                 requestEntity,
                 new ParameterizedTypeReference<Response<Integer>>() {

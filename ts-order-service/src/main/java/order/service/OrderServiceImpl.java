@@ -186,7 +186,8 @@ public class OrderServiceImpl implements OrderService {
         HttpEntity requestEntity = new HttpEntity(ids, headers);
         ResponseEntity<Response<List<String>>> re = restTemplate.exchange(
 //                "http://ts-station-service:12345/api/v1/stationservice/stations/namelist",
-                "http://localhost:12345/api/v1/stationservice/stations/namelist",
+                "http://ts-station-service/api/v1/stationservice/stations/namelist",
+//                "http://localhost:12345/api/v1/stationservice/stations/namelist",
                 HttpMethod.POST,
                 requestEntity,
                 new ParameterizedTypeReference<Response<List<String>>>() {

@@ -47,7 +47,8 @@ public class SeatServiceImpl implements SeatService {
             HttpEntity requestEntity = new HttpEntity(headers);
             re = restTemplate.exchange(
 //                    "http://ts-travel-service:12346/api/v1/travelservice/routes/" + trainNumber,
-                    "http://localhost:12346/api/v1/travelservice/routes/" + trainNumber,
+                    "http://ts-travel-service/api/v1/travelservice/routes/" + trainNumber,
+//                    "http://localhost:12346/api/v1/travelservice/routes/" + trainNumber,
                     HttpMethod.GET,
                     requestEntity,
                     new ParameterizedTypeReference<Response<Route>>() {
@@ -58,8 +59,9 @@ public class SeatServiceImpl implements SeatService {
             //Call the microservice to query for residual Ticket information: the set of the Ticket sold for the specified seat type
             requestEntity = new HttpEntity(seatRequest, headers);
             re3 = restTemplate.exchange(
-                    "http://localhost:12031/api/v1/orderservice/order/tickets",
+//                    "http://localhost:12031/api/v1/orderservice/order/tickets",
 //                    "http://ts-order-service:12031/api/v1/orderservice/order/tickets",
+                    "http://ts-order-service/api/v1/orderservice/order/tickets",
                     HttpMethod.POST,
                     requestEntity,
                     new ParameterizedTypeReference<Response<LeftTicketInfo>>() {
@@ -71,7 +73,8 @@ public class SeatServiceImpl implements SeatService {
             requestEntity = new HttpEntity(headers);
             re2 = restTemplate.exchange(
 //                    "http://ts-travel-service:12346/api/v1/travelservice/train_types/" + seatRequest.getTrainNumber(),
-                    "http://localhost:12346/api/v1/travelservice/train_types/" + seatRequest.getTrainNumber(),
+                    "http://ts-travel-service/api/v1/travelservice/train_types/" + seatRequest.getTrainNumber(),
+//                    "http://localhost:12346/api/v1/travelservice/train_types/" + seatRequest.getTrainNumber(),
                     HttpMethod.GET,
                     requestEntity,
                     new ParameterizedTypeReference<Response<TrainType>>() {
@@ -191,7 +194,8 @@ public class SeatServiceImpl implements SeatService {
             HttpEntity requestEntity = new HttpEntity(headers);
             re = restTemplate.exchange(
 //                    "http://ts-travel-service:12346/api/v1/travelservice/routes/" + trainNumber,
-                    "http://localhost:12346/api/v1/travelservice/routes/" + trainNumber,
+                    "http://ts-travel-service/api/v1/travelservice/routes/" + trainNumber,
+//                    "http://localhost:12346/api/v1/travelservice/routes/" + trainNumber,
                     HttpMethod.GET,
                     requestEntity,
                     new ParameterizedTypeReference<Response<Route>>() {
@@ -203,7 +207,8 @@ public class SeatServiceImpl implements SeatService {
             requestEntity = new HttpEntity(seatRequest, headers);
             re3 = restTemplate.exchange(
 //                    "http://ts-order-service:12031/api/v1/orderservice/order/tickets",
-                    "http://localhost:12031/api/v1/orderservice/order/tickets",
+                    "http://ts-order-service/api/v1/orderservice/order/tickets",
+//                    "http://localhost:12031/api/v1/orderservice/order/tickets",
                     HttpMethod.POST,
                     requestEntity,
                     new ParameterizedTypeReference<Response<LeftTicketInfo>>() {
@@ -216,7 +221,8 @@ public class SeatServiceImpl implements SeatService {
             requestEntity = new HttpEntity(headers);
             re2 = restTemplate.exchange(
 //                    "http://ts-travel-service:12346/api/v1/travelservice/train_types/" + seatRequest.getTrainNumber(),
-                    "http://localhost:12346/api/v1/travelservice/train_types/" + seatRequest.getTrainNumber(),
+                    "http://ts-travel-service/api/v1/travelservice/train_types/" + seatRequest.getTrainNumber(),
+//                    "http://localhost:12346/api/v1/travelservice/train_types/" + seatRequest.getTrainNumber(),
                     HttpMethod.GET,
                     requestEntity,
                     new ParameterizedTypeReference<Response<TrainType>>() {
@@ -312,8 +318,9 @@ public class SeatServiceImpl implements SeatService {
         String configName = "DirectTicketAllocationProportion";
         HttpEntity requestEntity = new HttpEntity(headers);
         ResponseEntity<Response<Config>> re = restTemplate.exchange(
-                "http://localhost:15679/api/v1/configservice/configs/" + configName,
+//                "http://localhost:15679/api/v1/configservice/configs/" + configName,
 //                "http://ts-config-service:15679/api/v1/configservice/configs/" + configName,
+                "http://ts-config-service/api/v1/configservice/configs/" + configName,
                 HttpMethod.GET,
                 requestEntity,
                 new ParameterizedTypeReference<Response<Config>>() {

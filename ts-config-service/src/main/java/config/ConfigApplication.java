@@ -23,9 +23,4 @@ public class ConfigApplication {
     public static void main(String[] args) {
         SpringApplication.run(ConfigApplication.class, args);
     }
-
-    @Bean
-    public RestTemplate restTemplate(RestTemplateBuilder builder) {
-        return builder.build();
-    }
 }

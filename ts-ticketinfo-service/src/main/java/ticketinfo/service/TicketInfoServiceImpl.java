@@ -24,7 +24,8 @@ public class TicketInfoServiceImpl implements TicketInfoService {
         HttpEntity requestEntity = new HttpEntity(info, headers);
         ResponseEntity<Response> re = restTemplate.exchange(
 //                "http://ts-basic-service:15680/api/v1/basicservice/basic/travel",
-                "http://localhost:15680/api/v1/basicservice/basic/travel",
+                "http://ts-basic-service/api/v1/basicservice/basic/travel",
+//                "http://localhost:15680/api/v1/basicservice/basic/travel",
                 HttpMethod.POST,
                 requestEntity,
                 Response.class);
@@ -36,7 +37,8 @@ public class TicketInfoServiceImpl implements TicketInfoService {
         HttpEntity requestEntity = new HttpEntity(headers);
         ResponseEntity<Response> re = restTemplate.exchange(
 //                "http://ts-basic-service:15680/api/v1/basicservice/basic/" + name,
-                "http://localhost:15680/api/v1/basicservice/basic/" + name,
+                "http://ts-basic-service/api/v1/basicservice/basic/" + name,
+//                "http://localhost:15680/api/v1/basicservice/basic/" + name,
                 HttpMethod.GET,
                 requestEntity,
                 Response.class);

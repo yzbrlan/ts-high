@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -111,7 +113,8 @@ public class PreserveServiceImpl implements PreserveService {
         HttpEntity requestEntity = new HttpEntity(query, headers);
         ResponseEntity<Response<TravelResult>> re = restTemplate.exchange(
 //                "http://ts-ticketinfo-service:15681/api/v1/ticketinfoservice/ticketinfo",
-                "http://localhost:15681/api/v1/ticketinfoservice/ticketinfo",
+                "http://ts-ticketinfo-service/api/v1/ticketinfoservice/ticketinfo",
+//                "http://localhost:15681/api/v1/ticketinfoservice/ticketinfo",
                 HttpMethod.POST,
                 requestEntity,
                 new ParameterizedTypeReference<Response<TravelResult>>() {
@@ -251,7 +254,8 @@ public class PreserveServiceImpl implements PreserveService {
         HttpEntity requestEntityTicket = new HttpEntity(seatRequest, httpHeaders);
         ResponseEntity<Response<Ticket>> reTicket = restTemplate.exchange(
 //                "http://ts-seat-service:18898/api/v1/seatservice/seats",
-                "http://localhost:18898/api/v1/seatservice/seats",
+                "http://ts-seat-service/api/v1/seatservice/seats",
+//                "http://localhost:18898/api/v1/seatservice/seats",
                 HttpMethod.POST,
                 requestEntityTicket,
                 new ParameterizedTypeReference<Response<Ticket>>() {
@@ -264,8 +268,9 @@ public class PreserveServiceImpl implements PreserveService {
         PreserveServiceImpl.LOGGER.info("[Preserve Service][Send Email]");
         HttpEntity requestEntitySendEmail = new HttpEntity(notifyInfo, httpHeaders);
         ResponseEntity<Boolean> reSendEmail = restTemplate.exchange(
-                "http://localhost:17853/api/v1/notifyservice/notification/order_cancel_success",
+//                "http://localhost:17853/api/v1/notifyservice/notification/order_cancel_success",
 //                "http://ts-notification-service:17853/api/v1/notifyservice/notification/order_cancel_success",
+                "http://ts-notification-service/api/v1/notifyservice/notification/order_cancel_success",
                 HttpMethod.POST,
                 requestEntitySendEmail,
                 Boolean.class);
@@ -278,7 +283,8 @@ public class PreserveServiceImpl implements PreserveService {
 
         HttpEntity requestEntitySendEmail = new HttpEntity(httpHeaders);
         ResponseEntity<Response<User>> getAccount = restTemplate.exchange(
-                "http://localhost:12342/api/v1/userservice/users/id/" + accountId,
+//                "http://localhost:12342/api/v1/userservice/users/id/" + accountId,
+                "http://ts-user-service/api/v1/userservice/users/id/" + accountId,
 //                "http://ts-user-service:12342/api/v1/userservice/users/id/" + accountId,
                 HttpMethod.GET,
                 requestEntitySendEmail,
@@ -306,7 +312,8 @@ public class PreserveServiceImpl implements PreserveService {
 
         HttpEntity requestQueryForStationId = new HttpEntity(httpHeaders);
         ResponseEntity<Response<String>> reQueryForStationId = restTemplate.exchange(
-                "http://localhost:12345/api/v1/stationservice/stations/id/" + stationName,
+//                "http://localhost:12345/api/v1/stationservice/stations/id/" + stationName,
+                "http://ts-station-service/api/v1/stationservice/stations/id/" + stationName,
 //                "http://ts-station-service:12345/api/v1/stationservice/stations/id/" + stationName,
                 HttpMethod.GET,
                 requestQueryForStationId,
@@ -336,8 +343,9 @@ public class PreserveServiceImpl implements PreserveService {
 
         HttpEntity requestGetTripAllDetailResult = new HttpEntity(gtdi, httpHeaders);
         ResponseEntity<Response<TripAllDetail>> reGetTripAllDetailResult = restTemplate.exchange(
+                "http://ts-travel-service/api/v1/travelservice/trip_detail",
 //                "http://ts-travel-service:12346/api/v1/travelservice/trip_detail",
-                "http://localhost:12346/api/v1/travelservice/trip_detail",
+//                "http://localhost:12346/api/v1/travelservice/trip_detail",
                 HttpMethod.POST,
                 requestGetTripAllDetailResult,
                 new ParameterizedTypeReference<Response<TripAllDetail>>() {
@@ -353,7 +361,8 @@ public class PreserveServiceImpl implements PreserveService {
         HttpEntity requestGetContactsResult = new HttpEntity(httpHeaders);
         ResponseEntity<Response<Contacts>> reGetContactsResult = restTemplate.exchange(
 //                "http://ts-contacts-service:12347/api/v1/contactservice/contacts/" + contactsId,
-                "http://localhost:12347/api/v1/contactservice/contacts/" + contactsId,
+                "http://ts-contacts-service/api/v1/contactservice/contacts/" + contactsId,
+//                "http://localhost:12347/api/v1/contactservice/contacts/" + contactsId,
                 HttpMethod.GET,
                 requestGetContactsResult,
                 new ParameterizedTypeReference<Response<Contacts>>() {
@@ -367,7 +376,8 @@ public class PreserveServiceImpl implements PreserveService {
 
         HttpEntity requestEntityCreateOrderResult = new HttpEntity(coi, httpHeaders);
         ResponseEntity<Response<Order>> reCreateOrderResult = restTemplate.exchange(
-                "http://localhost:12031/api/v1/orderservice/order",
+//                "http://localhost:12031/api/v1/orderservice/order",
+                "http://ts-order-service/api/v1/orderservice/order",
 //                "http://ts-order-service:12031/api/v1/orderservice/order",
                 HttpMethod.POST,
                 requestEntityCreateOrderResult,
