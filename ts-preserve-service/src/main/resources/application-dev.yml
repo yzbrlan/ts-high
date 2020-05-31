@@ -14,12 +14,19 @@ server:
 spring:
   application:
     name: ts-preserve-service
-
+  zipkin:
+    base-url: http://101.132.193.242:9411
+  sleuth:
+    sampler:
+      percentage: 1
 swagger:
   controllerPackage: preserve.controller
-
 opentracing:
   jaeger:
     udp-sender:
       host: 101.132.193.242
       port: 6831
+
+PRODUCT:
+  ribbon:
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule

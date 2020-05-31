@@ -24,7 +24,7 @@ public class ContactsServiceImpl implements ContactsService {
     @Autowired
     private ContactsRepository contactsRepository;
 
-    String success = "Success";
+    String success = "Success  contact2 ";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ContactsServiceImpl.class);
 

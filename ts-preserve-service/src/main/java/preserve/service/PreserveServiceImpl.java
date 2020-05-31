@@ -367,7 +367,7 @@ public class PreserveServiceImpl implements PreserveService {
                 requestGetContactsResult,
                 new ParameterizedTypeReference<Response<Contacts>>() {
                 });
-
+        PreserveServiceImpl.LOGGER.debug(reGetContactsResult.getBody().getMsg());
         return reGetContactsResult.getBody();
     }
 
