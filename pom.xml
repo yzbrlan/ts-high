@@ -29,6 +29,7 @@
         <module>ts-route-service</module>
 		<module>ts-seat-service</module>
 		<module>ts-user-service</module>
+		<module>ts-config-service</module>
     </modules>
 
 	<dependencies>

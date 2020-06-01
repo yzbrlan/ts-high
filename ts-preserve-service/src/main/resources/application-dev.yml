@@ -14,7 +14,11 @@ server:
 spring:
   application:
     name: ts-preserve-service
-
+  rabbitmq:
+    host: 101.132.193.242
+    port: 5672
+    password: guest
+    username: guest
 swagger:
   controllerPackage: preserve.controller
 

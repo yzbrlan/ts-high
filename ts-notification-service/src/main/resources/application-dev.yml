@@ -25,7 +25,11 @@ spring:
           starttls:
             enable: true
             required: true
-
+  rabbitmq:
+    host: 101.132.193.242
+    port: 5672
+    password: guest
+    username: guest
 swagger:
   controllerPackage: notification.controller
 #  main:

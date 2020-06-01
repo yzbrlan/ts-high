@@ -1,7 +1,10 @@
 package preserve.controller;
 
+import com.netflix.discovery.converters.Auto;
+import edu.fudan.common.util.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -20,11 +23,16 @@ public class PreserveController {
 
     @Autowired
     private PreserveService preserveService;
+    @Autowired
+    private AmqpTemplate amqpTemplate;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PreserveController.class);
 
     @GetMapping(path = "/welcome")
     public String home() {
+        NotifyInfo notifyInfo=new NotifyInfo();
+        notifyInfo.setEmail("fdsfdsfsdfdsfds");
+        amqpTemplate.convertAndSend("email","preserveSuccess",JsonUtils.object2Json(notifyInfo));
         return "Welcome to [ Preserve Service ] !";
     }
 

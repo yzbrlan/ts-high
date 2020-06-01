@@ -1,9 +1,11 @@
 package preserve.service;
 
+import edu.fudan.common.util.JsonUtils;
 import edu.fudan.common.util.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
@@ -28,6 +30,9 @@ public class PreserveServiceImpl implements PreserveService {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private AmqpTemplate amqpTemplate;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PreserveServiceImpl.class);
 
@@ -210,6 +215,7 @@ public class PreserveServiceImpl implements PreserveService {
             consignRequest.setWithin(oti.isWithin());
             log.info("CONSIGN INFO : " +consignRequest.toString());
             Response icresult = createConsign(consignRequest, headers);
+
             if (icresult.getStatus() == 1) {
                 PreserveServiceImpl.LOGGER.info("[Preserve Service][Step 7] Consign Success");
             } else {
@@ -238,8 +244,10 @@ public class PreserveServiceImpl implements PreserveService {
         notifyInfo.setSeatClass(SeatClass.getNameByCode(order.getSeatClass()));
         notifyInfo.setStartingTime(order.getTravelTime().toString());
 
-        sendEmail(notifyInfo, headers);
-
+        //发送mq消息
+        PreserveServiceImpl.LOGGER.info("[Preserve Service][Send Email]");
+        amqpTemplate.convertAndSend("email","preserveSuccess",JsonUtils.object2Json(notifyInfo));
+//        sendEmail(notifyInfo,headers);
         return returnResponse;
     }
 
