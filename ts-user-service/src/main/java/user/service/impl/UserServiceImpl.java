@@ -3,6 +3,8 @@ package user.service.impl;
 import edu.fudan.common.util.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ import java.util.UUID;
  */
 @Service
 @Slf4j
+@CacheConfig(cacheNames = "user")
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -105,6 +108,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(key = "#userId")
     public Response deleteUser(UUID userId, HttpHeaders headers) {
         log.info("DELETE USER BY ID :" + userId);
         User user = userRepository.findByUserId(userId);
@@ -121,6 +125,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(key = "#userDto.userId")
     public Response updateUser(UserDto userDto, HttpHeaders headers) {
         log.info("UPDATE USER :" + userDto.toString());
         User oldUser = userRepository.findByUserName(userDto.getUserName());

@@ -1,6 +1,8 @@
 package train.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import train.entity.TrainType;
@@ -9,6 +11,7 @@ import train.repository.TrainTypeRepository;
 import java.util.List;
 
 @Service
+@CacheConfig(cacheNames = "train")
 public class TrainServiceImpl implements TrainService {
 
     @Autowired
@@ -37,6 +40,7 @@ public class TrainServiceImpl implements TrainService {
     }
 
     @Override
+    @CacheEvict(key = "#trainType.id")
     public boolean update(TrainType trainType, HttpHeaders headers) {
         boolean result = false;
         //
@@ -50,6 +54,7 @@ public class TrainServiceImpl implements TrainService {
     }
 
     @Override
+    @CacheEvict(key = "#trainType.id")
     public boolean delete(String id, HttpHeaders headers) {
         boolean result = false;
         if (repository.findById(id) != null) {

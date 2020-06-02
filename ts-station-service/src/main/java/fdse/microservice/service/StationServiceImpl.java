@@ -4,6 +4,8 @@ import edu.fudan.common.util.Response;
 import fdse.microservice.entity.*;
 import fdse.microservice.repository.StationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ import java.util.List;
 
 
 @Service
+@CacheConfig(cacheNames = "station")
 public class StationServiceImpl implements StationService {
 
     @Autowired
@@ -40,6 +43,7 @@ public class StationServiceImpl implements StationService {
     }
 
     @Override
+    @CacheEvict(key = "#info.name")
     public Response update(Station info, HttpHeaders headers) {
 
         if (repository.findById(info.getId()) == null) {
@@ -53,6 +57,7 @@ public class StationServiceImpl implements StationService {
     }
 
     @Override
+    @CacheEvict(key = "#info.name")
     public Response delete(Station info, HttpHeaders headers) {
 
         if (repository.findById(info.getId()) != null) {

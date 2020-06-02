@@ -1,5 +1,6 @@
 package fdse.microservice.service;
 
+import com.netflix.discovery.converters.Auto;
 import edu.fudan.common.util.JsonUtils;
 import edu.fudan.common.util.Response;
 import fdse.microservice.entity.*;
@@ -25,6 +26,8 @@ public class BasicServiceImpl implements BasicService {
 
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private Client client;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BasicServiceImpl.class);
 
@@ -134,17 +137,8 @@ public class BasicServiceImpl implements BasicService {
 
     public TrainType queryTrainType(String trainTypeId, HttpHeaders headers) {
         BasicServiceImpl.LOGGER.info("[Basic Information Service][Query Train Type] Train Type: {}", trainTypeId);
-        HttpEntity requestEntity = new HttpEntity( headers);
-        ResponseEntity<Response> re = restTemplate.exchange(
-//                "http://ts-train-service:14567/api/v1/trainservice/trains/" + trainTypeId,
-                "http://ts-train-service/api/v1/trainservice/trains/" + trainTypeId,
-//                "http://localhost:14567/api/v1/trainservice/trains/" + trainTypeId,
-                HttpMethod.GET,
-                requestEntity,
-                Response.class);
-        Response  response = re.getBody();
 
-        return JsonUtils.conveterObject(response.getData(), TrainType.class);
+        return client.queryTrainType(trainTypeId, headers);
     }
 
     private Route getRouteByRouteId(String routeId, HttpHeaders headers) {

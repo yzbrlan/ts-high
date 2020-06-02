@@ -1,5 +1,6 @@
 package travel.service;
 
+import com.netflix.discovery.converters.Auto;
 import edu.fudan.common.util.JsonUtils;
 import edu.fudan.common.util.Response;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import travel.entity.*;
 import travel.repository.TripRepository;
+import travel.repository.TripService;
 
 import java.util.*;
 
@@ -27,7 +29,13 @@ public class TravelServiceImpl implements TravelService {
     private TripRepository repository;
 
     @Autowired
+    private TripService tripService;
+
+    @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private Client client;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TravelServiceImpl.class);
 
@@ -127,7 +135,7 @@ public class TravelServiceImpl implements TravelService {
     public Response delete(String tripId, HttpHeaders headers) {
         TripId ti = new TripId(tripId);
         if (repository.findByTripId(ti) != null) {
-            repository.deleteByTripId(ti);
+            tripService.deleteByTripId(ti);
             return new Response<>(1, "Delete trip:" + tripId + ".", tripId);
         } else {
             return new Response<>(0, "Trip " + tripId + " doesn't exist.", null);
@@ -170,7 +178,7 @@ public class TravelServiceImpl implements TravelService {
     public Response getTripAllDetailInfo(TripAllDetailInfo gtdi, HttpHeaders headers) {
         TripAllDetail gtdr = new TripAllDetail();
         TravelServiceImpl.LOGGER.info("[TravelService] [TripAllDetailInfo] TripId: {}", gtdi.getTripId());
-        Trip trip = repository.findByTripId(new TripId(gtdi.getTripId()));
+        Trip trip = tripService.findByTripId(gtdi.getTripId());
         if (trip == null) {
             gtdr.setTripResponse(null);
             gtdr.setTrip(null);
@@ -189,7 +197,7 @@ public class TravelServiceImpl implements TravelService {
                     gtdr.setTrip(null);
                 } else {
                     gtdr.setTripResponse(tripResponse);
-                    gtdr.setTrip(repository.findByTripId(new TripId(gtdi.getTripId())));
+                    gtdr.setTrip(tripService.findByTripId(gtdi.getTripId()));
                 }
             }else{
                 gtdr.setTripResponse(null);
@@ -332,18 +340,8 @@ public class TravelServiceImpl implements TravelService {
     }
 
     private String queryForStationId(String stationName, HttpHeaders headers) {
-        HttpEntity requestEntity = new HttpEntity(headers);
-        ResponseEntity<Response<String>> re = restTemplate.exchange(
-//                "http://localhost:15681/api/v1/ticketinfoservice/ticketinfo/" + stationName,
-//                "http://ts-ticketinfo-service:15681/api/v1/ticketinfoservice/ticketinfo/" + stationName,
-                "http://ts-ticketinfo-service/api/v1/ticketinfoservice/ticketinfo/" + stationName,
-                HttpMethod.GET,
-                requestEntity,
-                new ParameterizedTypeReference<Response<String>>() {
-                });
-        TravelServiceImpl.LOGGER.info("Query for Station id is: {}", re.getBody().toString());
 
-        return re.getBody().getData();
+        return client.queryForStationId(stationName,headers);
     }
 
     private Route getRouteByRouteId(String routeId, HttpHeaders headers) {

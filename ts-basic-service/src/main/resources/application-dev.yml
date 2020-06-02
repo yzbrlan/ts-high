@@ -4,7 +4,9 @@ server:
 spring:
   application:
     name: ts-basic-service
-
+  redis:
+    host: 101.132.193.242
+    port: 6379
 swagger:
   controllerPackage: fdse.microservice.controller
 

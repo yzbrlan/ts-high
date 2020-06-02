@@ -19,9 +19,11 @@ spring:
     port: 5672
     password: guest
     username: guest
+  redis:
+    host: 101.132.193.242
+    port: 6379
 swagger:
   controllerPackage: preserve.controller
-
 opentracing:
   jaeger:
     udp-sender:

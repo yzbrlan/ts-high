@@ -1,12 +1,16 @@
 package preserve.service;
 
+import com.netflix.discovery.converters.Auto;
 import edu.fudan.common.util.JsonUtils;
 import edu.fudan.common.util.Response;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.core.ParameterizedTypeReference;
@@ -18,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import preserve.entity.*;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
 
@@ -33,6 +38,9 @@ public class PreserveServiceImpl implements PreserveService {
 
     @Autowired
     private AmqpTemplate amqpTemplate;
+
+    @Autowired
+    private Client client;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PreserveServiceImpl.class);
 
@@ -213,7 +221,7 @@ public class PreserveServiceImpl implements PreserveService {
             consignRequest.setPhone(oti.getConsigneePhone());
             consignRequest.setWeight(oti.getConsigneeWeight());
             consignRequest.setWithin(oti.isWithin());
-            log.info("CONSIGN INFO : " +consignRequest.toString());
+            log.info("CONSIGN INFO : " + consignRequest.toString());
             Response icresult = createConsign(consignRequest, headers);
 
             if (icresult.getStatus() == 1) {
@@ -246,7 +254,7 @@ public class PreserveServiceImpl implements PreserveService {
 
         //发送mq消息
         PreserveServiceImpl.LOGGER.info("[Preserve Service][Send Email]");
-        amqpTemplate.convertAndSend("email","preserveSuccess",JsonUtils.object2Json(notifyInfo));
+        amqpTemplate.convertAndSend("email", "preserveSuccess", JsonUtils.object2Json(notifyInfo));
 //        sendEmail(notifyInfo,headers);
         return returnResponse;
     }
@@ -288,18 +296,7 @@ public class PreserveServiceImpl implements PreserveService {
 
     public User getAccount(String accountId, HttpHeaders httpHeaders) {
         PreserveServiceImpl.LOGGER.info("[Cancel Order Service][Get Order By Id]");
-
-        HttpEntity requestEntitySendEmail = new HttpEntity(httpHeaders);
-        ResponseEntity<Response<User>> getAccount = restTemplate.exchange(
-//                "http://localhost:12342/api/v1/userservice/users/id/" + accountId,
-                "http://ts-user-service/api/v1/userservice/users/id/" + accountId,
-//                "http://ts-user-service:12342/api/v1/userservice/users/id/" + accountId,
-                HttpMethod.GET,
-                requestEntitySendEmail,
-                new ParameterizedTypeReference<Response<User>>() {
-                });
-        Response<User> result = getAccount.getBody();
-        return result.getData();
+        return client.getAccount(accountId,httpHeaders);
     }
 
     private Response addAssuranceForOrder(int assuranceType, String orderId, HttpHeaders httpHeaders) {
@@ -314,37 +311,10 @@ public class PreserveServiceImpl implements PreserveService {
         return reAddAssuranceResult.getBody();
     }
 
-    private String queryForStationId(String stationName, HttpHeaders httpHeaders) {
+    public String queryForStationId(String stationName, HttpHeaders httpHeaders) {
         PreserveServiceImpl.LOGGER.info("[Preserve Other Service][Get Station Name]");
-
-
-        HttpEntity requestQueryForStationId = new HttpEntity(httpHeaders);
-        ResponseEntity<Response<String>> reQueryForStationId = restTemplate.exchange(
-//                "http://localhost:12345/api/v1/stationservice/stations/id/" + stationName,
-                "http://ts-station-service/api/v1/stationservice/stations/id/" + stationName,
-//                "http://ts-station-service:12345/api/v1/stationservice/stations/id/" + stationName,
-                HttpMethod.GET,
-                requestQueryForStationId,
-                new ParameterizedTypeReference<Response<String>>() {
-                });
-
-        return reQueryForStationId.getBody().getData();
+        return client.queryForStationId(stationName, httpHeaders);
     }
-
-    private Response checkSecurity(String accountId, HttpHeaders httpHeaders) {
-        PreserveServiceImpl.LOGGER.info("[Preserve Other Service][Check Security] Checking....");
-
-        HttpEntity requestCheckResult = new HttpEntity(httpHeaders);
-        ResponseEntity<Response> reCheckResult = restTemplate.exchange(
-//                "http://ts-security-service:11188/api/v1/securityservice/securityConfigs/" + accountId,
-                "http://localhost:11188/api/v1/securityservice/securityConfigs/" + accountId,
-                HttpMethod.GET,
-                requestCheckResult,
-                Response.class);
-
-        return reCheckResult.getBody();
-    }
-
 
     private Response<TripAllDetail> getTripAllDetailInformation(TripAllDetailInfo gtdi, HttpHeaders httpHeaders) {
         PreserveServiceImpl.LOGGER.info("[Preserve Other Service][Get Trip All Detail Information] Getting....");
@@ -362,21 +332,15 @@ public class PreserveServiceImpl implements PreserveService {
         return reGetTripAllDetailResult.getBody();
     }
 
-
     private Response<Contacts> getContactsById(String contactsId, HttpHeaders httpHeaders) {
         PreserveServiceImpl.LOGGER.info("[Preserve Other Service][Get Contacts By Id] Getting....");
+        Response reponse = JsonUtils.json2Object(client.getContactsById(contactsId, httpHeaders), Response.class);
+        Response<Contacts> contactsResponse = new Response<>();
+        contactsResponse.setStatus(reponse.getStatus());
+        contactsResponse.setData(JsonUtils.json2Object(JsonUtils.object2Json(reponse.getData()), Contacts.class));
 
-        HttpEntity requestGetContactsResult = new HttpEntity(httpHeaders);
-        ResponseEntity<Response<Contacts>> reGetContactsResult = restTemplate.exchange(
-//                "http://ts-contacts-service:12347/api/v1/contactservice/contacts/" + contactsId,
-                "http://ts-contacts-service/api/v1/contactservice/contacts/" + contactsId,
-//                "http://localhost:12347/api/v1/contactservice/contacts/" + contactsId,
-                HttpMethod.GET,
-                requestGetContactsResult,
-                new ParameterizedTypeReference<Response<Contacts>>() {
-                });
-
-        return reGetContactsResult.getBody();
+        contactsResponse.setMsg(reponse.getMsg());
+        return contactsResponse;
     }
 
     private Response createOrder(Order coi, HttpHeaders httpHeaders) {

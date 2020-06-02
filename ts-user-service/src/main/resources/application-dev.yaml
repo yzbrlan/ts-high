@@ -9,6 +9,9 @@ spring:
       host: 101.132.193.242
       database: ts-user-mongo
       port: 27017
+  redis:
+    host: 101.132.193.242
+    port: 6379
 swagger:
   controllerPackage: user.controller
 

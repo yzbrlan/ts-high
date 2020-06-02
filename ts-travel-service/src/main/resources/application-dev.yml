@@ -12,6 +12,9 @@ spring:
 #      password: ${MONGODB_PASSWORD}
       database: ts
       port: 27017
+  redis:
+    host: 101.132.193.242
+    port: 6379
 swagger:
   controllerPackage: travel.controller
 

@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import contacts.repository.ContactsRepository;
@@ -19,6 +21,7 @@ import java.util.UUID;
  */
 @Service
 @Slf4j
+@CacheConfig(cacheNames = "contacts")
 public class ContactsServiceImpl implements ContactsService {
 
     @Autowired
@@ -81,6 +84,7 @@ public class ContactsServiceImpl implements ContactsService {
     }
 
     @Override
+    @CacheEvict(key = "#contactsId")
     public Response delete(UUID contactsId, HttpHeaders headers) {
         contactsRepository.deleteById(contactsId);
         Contacts contacts = contactsRepository.findById(contactsId);
@@ -94,6 +98,7 @@ public class ContactsServiceImpl implements ContactsService {
     }
 
     @Override
+    @CacheEvict(key = "#contacts.id")
     public Response modify(Contacts contacts, HttpHeaders headers) {
         Response oldContactResponse = findContactsById(contacts.getId(), headers);
         log.info(oldContactResponse.toString());
